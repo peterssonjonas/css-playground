@@ -1,23 +1,147 @@
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition {
-    navigation: auto;
+@layer viewtransitions {
+  /* Step 1 - Enable view transitions */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
   }
 
+  /* Step 2 - Increase animation duration to see what actually happens during the view transition */
   ::view-transition-group(*) {
     animation-duration: 0.5s;
   }
-}
 
-@layer article {
-  #article-page {
-    h1,
-    p:has(strong) {
-      width: fit-content;
+  /* Step 3 - Create custom animations */
+  @layer custom-animation {
+    ::view-transition-old(root) {
+      animation-name: slide-out;
+    }
+    ::view-transition-new(root) {
+      animation-name: slide-in;
+    }
+
+    @keyframes scale-in {
+      from {
+        scale: 0;
+      }
+    }
+
+    @keyframes scale-out {
+      to {
+        scale: 0;
+      }
+    }
+
+    @keyframes slide-in {
+      from {
+        translate: 100vw 0;
+      }
+    }
+    @keyframes slide-out {
+      to {
+        translate: -100vw 0;
+      }
     }
   }
+
+  /* Step 4 - Exclude header from slide animations */
+  @layer header {
+    header {
+      view-transition-name: header;
+    }
+  }
+
+  /* Step 5 - Add underline to active nav item */
+  @layer current-page-indicator {
+    [aria-current='page'] {
+      position: relative;
+    }
+
+    [aria-current='page']::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      top: auto;
+      bottom: -0.5em;
+      background-color: currentColor;
+      height: 0.25rem;
+      view-transition-name: active-nav;
+    }
+  }
+
+  /* Step 6 - Transition card content into place */
+  /* @layer card {
+    @layer article1 {
+      #article1 .image,
+      #article-page-1 .image {
+        view-transition-name: image1;
+      }
+      #article1 a,
+      #article-page-1 h1 {
+        width: fit-content;
+        view-transition-name: title1;
+      }
+      #article1 p,
+      #article-page-1 .preamble {
+        view-transition-name: desc1;
+      }
+    }
+
+    @layer article2 {
+      #article2 .image,
+      #article-page-2 .image {
+        view-transition-name: image2;
+      }
+      #article2 a,
+      #article-page-2 h1 {
+        width: fit-content;
+        view-transition-name: title2;
+      }
+      #article2 p,
+      #article-page-2 .preamble {
+        view-transition-name: desc2;
+      }
+    }
+  } */
 }
 
-@layer card {
+@layer general {
+  main {
+    max-width: 60em;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  }
+
+  nav {
+    border-bottom: 1px solid #ddd;
+    box-shadow: 2px 2px 10px 0 #ddd;
+    padding: 1.5rem 1rem;
+  }
+  nav > ul {
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .image {
+    background-color: var(--color);
+    aspect-ratio: 3 / 2;
+  }
+
   .card {
     border: 1px solid #ddd;
     box-shadow: 2px 2px 10px 0 #ddd;
@@ -30,23 +154,9 @@
       width: fit-content;
     }
   }
-}
 
-@layer general {
-  main {
-    max-width: 60em;
-    margin-inline: auto;
-  }
-
-  .grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
-  }
-
-  .image {
-    background-color: var(--color);
-    aspect-ratio: 3 / 2;
+  #article-page h1 {
+    width: fit-content;
   }
 }
 
@@ -63,11 +173,6 @@
     padding: 1em;
   }
 
-  .not-supported {
-    border: 1px solid #ccc;
-    background-color: rgba(255 255 205 / 0.8);
-  }
-
   [data-reason='prefers-reduced-motion'] {
     border: 1px solid #ccc;
     background-color: rgb(205 230 255 / 0.8);
@@ -75,6 +180,11 @@
     @media (prefers-reduced-motion: reduce) {
       display: block;
     }
+  }
+
+  .not-supported {
+    border: 1px solid #ccc;
+    background-color: rgba(255 255 205 / 0.8);
   }
 
   [data-reason='cross-document-view-transitions'] {
@@ -93,6 +203,10 @@
 
   html {
     font-family: system-ui, sans-serif;
+  }
+
+  body {
+    margin: 0;
   }
 
   img {

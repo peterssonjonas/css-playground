@@ -22,7 +22,14 @@
   }
 })()
 
-window.addEventListener('pageswap', async (e) => {
+const enableJsViewTransitions = true
+
+if (enableJsViewTransitions) {
+  window.addEventListener('pageswap', onPageSwap)
+  window.addEventListener('pagereveal', onPageReveal)
+}
+
+function onPageSwap(e) {
   if (!e.viewTransition) return
 
   const currentUrl = e.activation.from?.url
@@ -30,6 +37,7 @@ window.addEventListener('pageswap', async (e) => {
     : null
   const targetUrl = new URL(e.activation.entry.url)
 
+  // Going from article page to homepage
   if (isArticlePage(currentUrl) && isHomePage(targetUrl)) {
     setTemporaryViewTransitionNames(
       [
@@ -41,6 +49,7 @@ window.addEventListener('pageswap', async (e) => {
     )
   }
 
+  // Going to article page
   if (isArticlePage(targetUrl)) {
     const articleSlug = extractSlugFromUrl(targetUrl)
 
@@ -53,15 +62,16 @@ window.addEventListener('pageswap', async (e) => {
       e.viewTransition.finished
     )
   }
-})
+}
 
-window.addEventListener('pagereveal', async (e) => {
+function onPageReveal(e) {
   if (!navigation.activation.from) return
   if (!e.viewTransition) return
 
   const fromUrl = new URL(navigation.activation.from.url)
   const currentUrl = new URL(navigation.activation.entry.url)
 
+  // Went from article page to homepage
   if (isArticlePage(fromUrl) && isHomePage(currentUrl)) {
     const articleSlug = extractSlugFromUrl(fromUrl)
 
@@ -75,6 +85,7 @@ window.addEventListener('pagereveal', async (e) => {
     )
   }
 
+  // Went to article page
   if (isArticlePage(currentUrl)) {
     setTemporaryViewTransitionNames(
       [
@@ -85,7 +96,7 @@ window.addEventListener('pagereveal', async (e) => {
       e.viewTransition.ready
     )
   }
-})
+}
 
 function isHomePage(url) {
   const path = url.pathname.split('/').pop()

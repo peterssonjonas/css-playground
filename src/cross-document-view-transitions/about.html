@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cross Document View Transitions</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <h1>About Cross Document View Transitions</h1>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis
+        architecto laudantium iure nam vero, ut adipisci neque magni culpa
+        repudiandae explicabo. Deleniti voluptate error cupiditate quam ipsam
+        commodi, quo aut!
+      </p>
+      <p>
+        Doloribus nisi incidunt quas fugit porro, harum, quam cum quos officia
+        reprehenderit error dignissimos doloremque aliquid! Eum minus quis fugit
+        ratione incidunt, enim ea dolore asperiores cum cumque praesentium
+        nihil?
+      </p>
+      <p>
+        Voluptate inventore asperiores non. Nostrum voluptatem voluptate labore
+        alias repellendus aspernatur fuga? Accusamus ea, aspernatur sint aut
+        accusantium tempora perspiciatis ut et, maxime omnis veritatis. Ab unde
+        ullam omnis quo!
+      </p>
+      <p>
+        Ipsum, necessitatibus? Ipsum sint, unde, culpa excepturi facere, eveniet
+        est illum officiis dolor iure voluptatem modi pariatur animi quidem
+        veniam. Culpa obcaecati deleniti tempore magnam, voluptatum harum
+        dolorum eius exercitationem.
+      </p>
+      <p>
+        Ut ad iusto similique nulla repellendus sed molestias magnam. Sit
+        provident debitis magni ipsum repudiandae amet a modi architecto nobis
+        ut neque reprehenderit, id dolore! Veniam officia labore aut minima?
+      </p>
+    </main>
+
+    <div class="warnings">
+      <div data-reason="prefers-reduced-motion">
+        You have <code>prefers-reduced-motion: reduce</code> enabled. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="cross-document-view-transitions">
+        Your browser does not support Cross-Document View Transitions. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="navigation-api">
+        Your browser does not support the Navigation API. As a result you won't
+        get to see a transition or only a partially working transition.
+      </div>
+    </div>
+  </body>
+</html>
