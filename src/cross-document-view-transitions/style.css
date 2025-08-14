@@ -1,0 +1,102 @@
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 0.5s;
+  }
+}
+
+@layer article {
+  #article-page {
+    h1,
+    p:has(strong) {
+      width: fit-content;
+    }
+  }
+}
+
+@layer card {
+  .card {
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 10px 0 #ddd;
+  }
+  .card-content {
+    padding: 0 0.5rem;
+
+    h2,
+    p {
+      width: fit-content;
+    }
+  }
+}
+
+@layer general {
+  main {
+    max-width: 60em;
+    margin-inline: auto;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  }
+
+  .image {
+    background-color: var(--color);
+    aspect-ratio: 3 / 2;
+  }
+}
+
+@layer warnings {
+  .warnings {
+    position: fixed;
+    inset: 0.5em;
+    top: auto;
+  }
+
+  .warnings > * {
+    display: none;
+    margin-block: 1em;
+    padding: 1em;
+  }
+
+  .not-supported {
+    border: 1px solid #ccc;
+    background-color: rgba(255 255 205 / 0.8);
+  }
+
+  [data-reason='prefers-reduced-motion'] {
+    border: 1px solid #ccc;
+    background-color: rgb(205 230 255 / 0.8);
+
+    @media (prefers-reduced-motion: reduce) {
+      display: block;
+    }
+  }
+
+  [data-reason='cross-document-view-transitions'] {
+    @supports not (view-transition-name: root) {
+      display: block;
+    }
+  }
+}
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: system-ui, sans-serif;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}

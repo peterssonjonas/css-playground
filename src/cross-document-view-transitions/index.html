@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View transitions</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>View Transitions</h1>
+      <div class="grid">
+        <div class="card" id="article1">
+          <div class="image" style="--color: orange"></div>
+          <div class="card-content">
+            <h2>
+              <a href="article1.html">Lorem, ipsum dolor</a>
+            </h2>
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Praesentium, amet!
+            </p>
+          </div>
+        </div>
+        <div class="card" id="article2">
+          <div class="image" style="--color: rebeccapurple"></div>
+          <div class="card-content">
+            <h2>
+              <a href="article2.html">Aperiam, obcaecati voluptas?</a>
+            </h2>
+            <p>
+              Dolorum eveniet officia dolores pariatur dolore blanditiis
+              delectus dolor et.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="warnings">
+      <div data-reason="prefers-reduced-motion">
+        You have <code>prefers-reduced-motion: reduce</code> enabled. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="cross-document-view-transitions">
+        Your browser does not support Cross-Document View Transitions. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="navigation-api">
+        Your browser does not support the Navigation API. As a result you won't
+        get to see a transition or only a partially working transition.
+      </div>
+    </div>
+  </body>
+</html>
