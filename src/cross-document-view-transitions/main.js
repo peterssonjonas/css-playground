@@ -22,14 +22,17 @@
   }
 })()
 
-const enableJsViewTransitions = true
+const ENABLE_JS_VIEW_TRANSITIONS = true
+const ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS = false
 
-if (enableJsViewTransitions) {
+const pages = ['', 'index', 'about']
+
+if (ENABLE_JS_VIEW_TRANSITIONS) {
   window.addEventListener('pageswap', onPageSwap)
   window.addEventListener('pagereveal', onPageReveal)
 }
 
-function onPageSwap(e) {
+async function onPageSwap(e) {
   if (!e.viewTransition) return
 
   const currentUrl = e.activation.from?.url
@@ -50,7 +53,7 @@ function onPageSwap(e) {
   }
 
   // Going to article page
-  if (isArticlePage(targetUrl)) {
+  if (isHomePage(currentUrl) && isArticlePage(targetUrl)) {
     const articleSlug = extractSlugFromUrl(targetUrl)
 
     setTemporaryViewTransitionNames(
@@ -64,7 +67,7 @@ function onPageSwap(e) {
   }
 }
 
-function onPageReveal(e) {
+async function onPageReveal(e) {
   if (!navigation.activation.from) return
   if (!e.viewTransition) return
 
@@ -86,7 +89,7 @@ function onPageReveal(e) {
   }
 
   // Went to article page
-  if (isArticlePage(currentUrl)) {
+  if (isHomePage(fromUrl) && isArticlePage(currentUrl)) {
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#article-page .image`), 'image'],
@@ -94,6 +97,14 @@ function onPageReveal(e) {
         [document.querySelector(`#article-page .preamble`), 'desc'],
       ],
       e.viewTransition.ready
+    )
+  }
+
+  if (ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS) {
+    setTemporaryViewTranitionDirection(
+      fromUrl,
+      currentUrl,
+      e.viewTransition.finished
     )
   }
 }
@@ -121,4 +132,27 @@ async function setTemporaryViewTransitionNames(entries, vtPromise) {
   for (const [$el, name] of entries) {
     $el.style.viewTransitionName = ''
   }
+}
+
+async function setTemporaryViewTranitionDirection(
+  fromUrl,
+  currentUrl,
+  vtPromise
+) {
+  document.documentElement.dataset.direction = getDirection(fromUrl, currentUrl)
+
+  await vtPromise
+
+  delete document.documentElement.dataset.direction
+}
+
+function getDirection(fromUrl, currentUrl) {
+  const fromIndex = pages.indexOf(extractSlugFromUrl(fromUrl))
+  const currentIndex = pages.indexOf(extractSlugFromUrl(currentUrl))
+
+  if (currentIndex === -1) {
+    return 'forwards'
+  }
+
+  return fromIndex < currentIndex ? 'forwards' : 'backwards'
 }

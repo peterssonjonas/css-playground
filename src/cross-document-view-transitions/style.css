@@ -103,6 +103,43 @@
       }
     }
   } */
+
+  /* Step 7 - Direction aware transitions. Disable step 3 and 6 for this to work properly */
+  /* @layer direction {
+    [data-direction='forwards']::view-transition-old(root) {
+      animation-name: slide-out-left;
+    }
+    [data-direction='forwards']::view-transition-new(root) {
+      animation-name: slide-in-right;
+    }
+    [data-direction='backwards']::view-transition-old(root) {
+      animation-name: slide-out-right;
+    }
+    [data-direction='backwards']::view-transition-new(root) {
+      animation-name: slide-in-left;
+    }
+
+    @keyframes slide-out-left {
+      to {
+        translate: -100% 0;
+      }
+    }
+    @keyframes slide-in-right {
+      from {
+        translate: 100% 0;
+      }
+    }
+    @keyframes slide-out-right {
+      to {
+        translate: 100% 0;
+      }
+    }
+    @keyframes slide-in-left {
+      from {
+        translate: -100% 0;
+      }
+    }
+  } */
 }
 
 @layer general {
