@@ -25,7 +25,6 @@
         scale: 0;
       }
     }
-
     @keyframes scale-out {
       to {
         scale: 0;
@@ -40,6 +39,19 @@
     @keyframes slide-out {
       to {
         translate: -100vw 0;
+      }
+    }
+
+    @keyframes scale-in-and-rotate {
+      from {
+        scale: 0;
+        rotate: -1080deg;
+      }
+    }
+    @keyframes scale-out-and-rotate {
+      to {
+        scale: 0;
+        rotate: 1080deg;
       }
     }
   }
