@@ -29,14 +29,12 @@
   }
 })()
 
-const ENABLE_JS_VIEW_TRANSITIONS = false
+const ENABLE_JS_VIEW_TRANSITIONS = true
 const ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS = false
 
-const pages = ['', 'index', 'about']
-
 if (ENABLE_JS_VIEW_TRANSITIONS) {
-  window.addEventListener('pageswap', onPageSwap)
-  window.addEventListener('pagereveal', onPageReveal)
+  window.addEventListener('pageswap', onPageSwap, { once: true })
+  window.addEventListener('pagereveal', onPageReveal, { once: true })
 }
 
 async function onPageSwap(e) {
@@ -161,6 +159,7 @@ async function setTemporaryViewTranitionDirection(
   delete document.documentElement.dataset.direction
 }
 
+const pages = ['', 'index', 'about', 'articles', 'article1', 'article2']
 function getDirection(fromUrl, currentUrl) {
   const fromIndex = pages.indexOf(extractSlugFromUrl(fromUrl))
   const currentIndex = pages.indexOf(extractSlugFromUrl(currentUrl))
