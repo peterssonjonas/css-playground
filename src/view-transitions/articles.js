@@ -138,7 +138,6 @@ function addArticlesToDOM() {
 
     const image = articleElem.querySelector('.image')
     image.style.setProperty('--color', article.color)
-    image.style.setProperty('view-transition-name', `image${i + 1}`)
 
     const category = articleElem.querySelector('.category')
     category.textContent = article.category
