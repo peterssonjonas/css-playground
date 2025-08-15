@@ -2,14 +2,24 @@ const template = document.querySelector('#article-template')
 const wrapper = document.querySelector('.articles')
 const filterWrapper = document.querySelector('.filters')
 
-const categories = ['sport', 'nöje', 'ekonomi', 'inrikes', 'utrikes']
+const categories = ['all', 'sport', 'nöje', 'ekonomi', 'inrikes', 'utrikes']
 
 addFilterButtonsToDOM()
 addArticlesToDOM()
 
-const filterButtons = filterWrapper.querySelectorAll('.filter-btn')
+function addFilterButtonsToDOM() {
+  categories.forEach((category) => {
+    const button = document.createElement('button')
+    button.textContent = category
+    button.dataset.filter = category
+    button.classList.add('filter-btn')
+    if (category === 'all') button.classList.add('active')
+    addEventListenerToFilterButton(button)
+    filterWrapper.appendChild(button)
+  })
+}
 
-filterButtons.forEach((button) => {
+function addEventListenerToFilterButton(button) {
   button.addEventListener('click', (e) => {
     const filter = e.target.getAttribute('data-filter')
 
@@ -23,25 +33,6 @@ filterButtons.forEach((button) => {
       updateActiveButton(e.target)
       filterArticles(filter)
     })
-  })
-})
-
-function addFilterButtonsToDOM() {
-  const button = document.createElement('button')
-  button.textContent = 'all'
-  button.dataset.filter = 'all'
-  button.classList.add('filter-btn')
-  button.classList.add('active')
-
-  filterWrapper.appendChild(button)
-
-  categories.forEach((category) => {
-    const button = document.createElement('button')
-    button.textContent = category
-    button.dataset.filter = category
-    button.classList.add('filter-btn')
-
-    filterWrapper.appendChild(button)
   })
 }
 
@@ -143,7 +134,7 @@ function addArticlesToDOM() {
     category.textContent = article.category
 
     const categoryHue =
-      categories.indexOf(article.category) * (360 / categories.length)
+      categories.indexOf(article.category) * (360 / (categories.length - 1))
     category.style.setProperty('--color', `hsl(${categoryHue}, 50%, 80%)`)
 
     const link = articleElem.querySelector('a')
