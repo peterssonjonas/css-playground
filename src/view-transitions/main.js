@@ -8,6 +8,13 @@
     shouldThrow = true
   }
 
+  if (!document.startViewTransition) {
+    document.querySelector(
+      '[data-reason="same-document-view-transitions"]'
+    ).style.display = 'block'
+    shouldThrow = true
+  }
+
   if (!('CSSViewTransitionRule' in window)) {
     document.querySelector(
       '[data-reason="cross-document-view-transitions"]'
@@ -22,7 +29,7 @@
   }
 })()
 
-const ENABLE_JS_VIEW_TRANSITIONS = true
+const ENABLE_JS_VIEW_TRANSITIONS = false
 const ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS = false
 
 const pages = ['', 'index', 'about']
@@ -40,8 +47,8 @@ async function onPageSwap(e) {
     : null
   const targetUrl = new URL(e.activation.entry.url)
 
-  // Going from article page to homepage
-  if (isArticlePage(currentUrl) && isHomePage(targetUrl)) {
+  // Going from article page to articles list page
+  if (isArticlePage(currentUrl) && isArticlesListPage(targetUrl)) {
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#article-page .image`), 'image'],
@@ -53,7 +60,7 @@ async function onPageSwap(e) {
   }
 
   // Going to article page
-  if (isHomePage(currentUrl) && isArticlePage(targetUrl)) {
+  if (isArticlesListPage(currentUrl) && isArticlePage(targetUrl)) {
     const articleSlug = extractSlugFromUrl(targetUrl)
 
     setTemporaryViewTransitionNames(
@@ -74,8 +81,8 @@ async function onPageReveal(e) {
   const fromUrl = new URL(navigation.activation.from.url)
   const currentUrl = new URL(navigation.activation.entry.url)
 
-  // Went from article page to homepage
-  if (isArticlePage(fromUrl) && isHomePage(currentUrl)) {
+  // Went from article page to articles list page
+  if (isArticlePage(fromUrl) && isArticlesListPage(currentUrl)) {
     const articleSlug = extractSlugFromUrl(fromUrl)
 
     setTemporaryViewTransitionNames(
@@ -89,7 +96,7 @@ async function onPageReveal(e) {
   }
 
   // Went to article page
-  if (isHomePage(fromUrl) && isArticlePage(currentUrl)) {
+  if (isArticlesListPage(fromUrl) && isArticlePage(currentUrl)) {
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#article-page .image`), 'image'],
@@ -114,7 +121,15 @@ function isHomePage(url) {
   return path === '' || path === 'index.html'
 }
 
+function isArticlesListPage(url) {
+  const path = url.pathname.split('/').pop()
+  return path === 'articles.html'
+}
+
 function isArticlePage(url) {
+  const path = url.pathname.split('/').pop()
+
+  if (path === 'articles.html') return false
   return url.pathname.split('/').pop().startsWith('article')
 }
 

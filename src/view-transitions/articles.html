@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Articles - View Transitions</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="articles.js" defer></script>
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav class="wrapper">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="articles.html" aria-current="page">Articles</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="wrapper">
+      <h1 style="view-transition-name: articles-title">Articles</h1>
+
+      <div class="filters" style="view-transition-name: articles-filters"></div>
+
+      <div class="grid articles"></div>
+    </main>
+
+    <div class="warnings">
+      <div data-reason="prefers-reduced-motion">
+        You have <code>prefers-reduced-motion: reduce</code> enabled. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="same-document-view-transitions">
+        Your browser does not support Same-Document View Transitions. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="cross-document-view-transitions">
+        Your browser does not support Cross-Document View Transitions. As a
+        result you won't get to see a transition.
+      </div>
+      <div class="not-supported" data-reason="navigation-api">
+        Your browser does not support the Navigation API. As a result you won't
+        get to see a transition or only a partially working transition.
+      </div>
+    </div>
+  </body>
+</html>
+
+<template id="article-template">
+  <div class="card">
+    <div class="image" style="--color: orange"></div>
+    <span class="category"></span>
+    <div class="card-content">
+      <h2>
+        <a href="article1.html"></a>
+      </h2>
+      <p></p>
+    </div>
+  </div>
+</template>

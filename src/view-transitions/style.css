@@ -70,7 +70,7 @@
   }
 
   /* Step 6 - Transition card content into place */
-  /* @layer card {
+  @layer card {
     @layer article1 {
       #article1 .image,
       #article-page-1 .image {
@@ -102,7 +102,7 @@
         view-transition-name: desc2;
       }
     }
-  } */
+  }
 
   /* Step 7 - Direction aware transitions. Disable step 3 and 6 for this to work properly */
   /* @layer direction {
@@ -143,6 +143,10 @@
 }
 
 @layer general {
+  main {
+    margin-bottom: 2rem;
+  }
+
   .wrapper {
     max-width: 60em;
     margin-inline: auto;
@@ -175,7 +179,7 @@
   }
 
   .image {
-    background-color: var(--color);
+    background-color: var(--color, #ddd);
     aspect-ratio: 3 / 2;
   }
 
@@ -192,8 +196,35 @@
     }
   }
 
+  .category {
+    display: inline-block;
+    margin: 0.5rem;
+    margin-bottom: 0;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color, green);
+    border-radius: 100vw;
+  }
+
   #article-page h1 {
     width: fit-content;
+  }
+
+  .filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .filter-btn {
+    cursor: pointer;
+    background: #ddd;
+    border: 1px solid #ddd;
+    padding: 0.5em 1em;
+  }
+
+  .filter-btn.active {
+    background: #222;
+    color: white;
   }
 }
 
@@ -240,6 +271,7 @@
 
   html {
     font-family: system-ui, sans-serif;
+    scrollbar-gutter: stable both-edges;
   }
 
   body {
