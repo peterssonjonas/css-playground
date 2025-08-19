@@ -155,6 +155,13 @@
 }
 
 @layer general {
+  :root {
+    --bg: light-dark(#ddd, #888);
+    --shadow: 0 0 0.5rem light-dark(var(--bg), #444);
+    --border-color: light-dark(var(--bg), #444);
+    --link-color: light-dark(black, white);
+  }
+
   main {
     margin-bottom: 2rem;
   }
@@ -172,8 +179,10 @@
   }
 
   header {
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 0 0.5rem #ddd;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+  }
+  nav {
     padding: 1.5rem 1rem;
   }
   nav > ul {
@@ -183,21 +192,20 @@
     padding: 0;
     list-style: none;
   }
-
   nav a {
-    color: black;
+    color: var(--link-color);
     font-weight: bold;
     text-decoration: none;
   }
 
   .image {
-    background-color: var(--color, #ddd);
+    background-color: var(--color, var(--bg));
     aspect-ratio: 3 / 2;
   }
 
   .card {
-    border: 1px solid #ddd;
-    box-shadow: 0 0 0.5rem #ddd;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
   }
   .card-content {
     padding: 0 0.5rem;
@@ -209,11 +217,16 @@
   }
 
   .category {
+    --_category-color: light-dark(
+      hsl(var(--category-hue) 50% 80%),
+      hsl(var(--category-hue) 50% 30%)
+    );
+
     display: inline-block;
     margin: 0.5rem;
     margin-bottom: 0;
     padding: 0.5rem 0.75rem;
-    background-color: var(--color, green);
+    background-color: var(--_category-color);
     border-radius: 100vw;
   }
 
@@ -235,8 +248,8 @@
   }
 
   .filter-btn.active {
-    background: #222;
-    color: white;
+    background: light-dark(#222, #bbb);
+    color: light-dark(white, #222);
   }
 }
 
@@ -286,6 +299,7 @@
   html {
     font-family: system-ui, sans-serif;
     scrollbar-gutter: stable both-edges;
+    color-scheme: light dark;
   }
 
   body {

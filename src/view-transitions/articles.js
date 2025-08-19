@@ -135,7 +135,7 @@ function addArticlesToDOM() {
 
     const categoryHue =
       categories.indexOf(article.category) * (360 / (categories.length - 1))
-    category.style.setProperty('--color', `hsl(${categoryHue}, 50%, 80%)`)
+    category.style.setProperty('--category-hue', categoryHue)
 
     const link = articleElem.querySelector('a')
     link.href = article.link
