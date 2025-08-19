@@ -242,20 +242,22 @@
 
 @layer warnings {
   .warnings {
-    position: fixed;
-    inset: 0.5em;
-    top: auto;
+    position: sticky;
+
+    @media (prefers-color-scheme: dark) {
+      color: #222;
+    }
   }
 
   .warnings > * {
     display: none;
-    margin-block: 1em;
+    margin-block: 0.25em;
     padding: 1em;
   }
 
   [data-reason='prefers-reduced-motion'] {
     border: 1px solid #ccc;
-    background-color: rgb(205 230 255 / 0.8);
+    background-color: rgb(205 230 255 / 0.95);
 
     @media (prefers-reduced-motion: reduce) {
       display: block;
@@ -264,7 +266,7 @@
 
   .not-supported {
     border: 1px solid #ccc;
-    background-color: rgba(255 255 205 / 0.8);
+    background-color: rgb(255 255 205 / 0.95);
   }
 
   [data-reason='cross-document-view-transitions'] {

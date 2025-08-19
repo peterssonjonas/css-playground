@@ -9,6 +9,23 @@
   </head>
   <body>
     <header>
+      <div class="warnings">
+        <div data-reason="prefers-reduced-motion">
+          You have <code>prefers-reduced-motion: reduce</code> enabled. As a
+          result you won't get to see a transition.
+        </div>
+        <div
+          class="not-supported"
+          data-reason="cross-document-view-transitions"
+        >
+          Your browser does not support Cross-Document View Transitions. As a
+          result you won't get to see a transition.
+        </div>
+        <div class="not-supported" data-reason="navigation-api">
+          Your browser does not support the Navigation API. As a result you
+          won't get to see a transition or only a partially working transition.
+        </div>
+      </div>
       <nav class="wrapper">
         <ul>
           <li><a href="index.html" aria-current="page">Home</a></li>
@@ -76,20 +93,5 @@
         ut neque reprehenderit, id dolore! Veniam officia labore aut minima?
       </p>
     </main>
-
-    <div class="warnings">
-      <div data-reason="prefers-reduced-motion">
-        You have <code>prefers-reduced-motion: reduce</code> enabled. As a
-        result you won't get to see a transition.
-      </div>
-      <div class="not-supported" data-reason="cross-document-view-transitions">
-        Your browser does not support Cross-Document View Transitions. As a
-        result you won't get to see a transition.
-      </div>
-      <div class="not-supported" data-reason="navigation-api">
-        Your browser does not support the Navigation API. As a result you won't
-        get to see a transition or only a partially working transition.
-      </div>
-    </div>
   </body>
 </html>
