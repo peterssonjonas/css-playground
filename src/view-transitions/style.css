@@ -7,12 +7,14 @@
   }
 
   /* Step 2 - Increase animation duration to see what actually happens during the view transition */
-  :root {
-    --animation-duration: 2s;
-  }
-  ::view-transition-group(*) {
-    animation-duration: var(--animation-duration);
-  }
+  /* @layer duration {
+    :root {
+      --animation-duration: 2s;
+    }
+    ::view-transition-group(*) {
+      animation-duration: var(--animation-duration);
+    }
+  } */
 
   /* Step 3 - Create custom animations */
   @layer custom-animation {
@@ -35,7 +37,7 @@
         }
       }
     } */
-    @layer l-slide {
+    /* @layer l-slide {
       ::view-transition-old(root) {
         animation-name: slide-out;
       }
@@ -53,7 +55,7 @@
           translate: -100vw 0;
         }
       }
-    }
+    } */
     /* @layer l-slide-down-and-bounce {
       ::view-transition-old(root) {
         animation-delay: var(--animation-duration);
@@ -121,11 +123,11 @@
   }
 
   /* Step 4 - Exclude header from slide animations */
-  @layer header {
+  /* @layer header {
     header {
       view-transition-name: header;
     }
-  }
+  } */
 
   /* Step 5 - Add underline to active nav item */
   /* @layer current-page-indicator {

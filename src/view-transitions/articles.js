@@ -1,8 +1,50 @@
+const ENABLE_JS_VIEW_TRANSITIONS = false
+
 const template = document.querySelector('#article-template')
 const wrapper = document.querySelector('.articles')
 const filterWrapper = document.querySelector('.filters')
 
 const categories = ['all', 'sport', 'nöje', 'ekonomi', 'inrikes', 'utrikes']
+
+function addEventListenerToFilterButton(button) {
+  button.addEventListener('click', async (e) => {
+    const filter = e.target.getAttribute('data-filter')
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion)'
+    ).matches
+
+    if (
+      !document.startViewTransition ||
+      prefersReducedMotion ||
+      !ENABLE_JS_VIEW_TRANSITIONS
+    ) {
+      updateActiveButton(e.target)
+      filterArticles(filter)
+      return
+    }
+
+    const transition = document.startViewTransition(() => {
+      updateActiveButton(e.target)
+      filterArticles(filter)
+    })
+
+    document.querySelector('h1').style.viewTransitionName = 'articles-title'
+    filterWrapper.style.viewTransitionName = 'articles-filter'
+    wrapper.querySelectorAll('.card').forEach((card, i) => {
+      card.style.viewTransitionName = `article${i + 1}`
+    })
+
+    try {
+      await transition.finished
+    } finally {
+      document.querySelector('h1').style.viewTransitionName = ''
+      filterWrapper.style.viewTransitionName = ''
+      wrapper.querySelectorAll('.card').forEach((card, i) => {
+        card.style.viewTransitionName = ''
+      })
+    }
+  })
+}
 
 addFilterButtonsToDOM()
 addArticlesToDOM()
@@ -16,43 +58,6 @@ function addFilterButtonsToDOM() {
     if (category === 'all') button.classList.add('active')
     addEventListenerToFilterButton(button)
     filterWrapper.appendChild(button)
-  })
-}
-
-function addEventListenerToFilterButton(button) {
-  button.addEventListener('click', async (e) => {
-    const filter = e.target.getAttribute('data-filter')
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion)'
-    ).matches
-
-    if (!document.startViewTransition || prefersReducedMotion) {
-      updateActiveButton(e.target)
-      filterArticles(filter)
-      return
-    }
-
-    const transition = document.startViewTransition(() => {
-      updateActiveButton(e.target)
-      filterArticles(filter)
-    })
-    if (!filterWrapper.style.viewTransitionName) {
-      document.querySelector('h1').style.viewTransitionName = 'articles-title'
-      filterWrapper.style.viewTransitionName = 'articles-filter'
-      wrapper.querySelectorAll('.card').forEach((card, i) => {
-        card.style.viewTransitionName = `article${i + 1}`
-      })
-    }
-
-    try {
-      await transition.finished
-    } finally {
-      document.querySelector('h1').style.viewTransitionName = ''
-      filterWrapper.style.viewTransitionName = ''
-      wrapper.querySelectorAll('.card').forEach((card, i) => {
-        card.style.viewTransitionName = ''
-      })
-    }
   })
 }
 
