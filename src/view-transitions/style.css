@@ -7,53 +7,117 @@
   }
 
   /* Step 2 - Increase animation duration to see what actually happens during the view transition */
+  :root {
+    --animation-duration: 2s;
+  }
   ::view-transition-group(*) {
-    animation-duration: 0.5s;
+    animation-duration: var(--animation-duration);
   }
 
   /* Step 3 - Create custom animations */
   @layer custom-animation {
-    ::view-transition-old(root) {
-      animation-name: slide-out;
-    }
-    ::view-transition-new(root) {
-      animation-name: slide-in;
-    }
+    /* @layer l-scale {
+      ::view-transition-old(root) {
+        animation-name: scale-out;
+      }
+      ::view-transition-new(root) {
+        animation-name: scale-in;
+      }
 
-    @keyframes scale-in {
-      from {
-        scale: 0;
+      @keyframes scale-in {
+        from {
+          scale: 0;
+        }
       }
-    }
-    @keyframes scale-out {
-      to {
-        scale: 0;
+      @keyframes scale-out {
+        to {
+          scale: 0;
+        }
       }
-    }
+    } */
+    @layer l-slide {
+      ::view-transition-old(root) {
+        animation-name: slide-out;
+      }
+      ::view-transition-new(root) {
+        animation-name: slide-in;
+      }
 
-    @keyframes slide-in {
-      from {
-        translate: 100vw 0;
+      @keyframes slide-in {
+        from {
+          translate: 100vw 0;
+        }
+      }
+      @keyframes slide-out {
+        to {
+          translate: -100vw 0;
+        }
       }
     }
-    @keyframes slide-out {
-      to {
-        translate: -100vw 0;
+    /* @layer l-slide-down-and-bounce {
+      ::view-transition-old(root) {
+        animation-delay: var(--animation-duration);
       }
-    }
+      ::view-transition-new(root) {
+        animation: slide-down var(--animation-duration)
+          linear(
+            0,
+            0.205 10.6%,
+            0.373 16.8%,
+            0.61 22.7%,
+            0.997 30.1%,
+            0.711 36.4%,
+            0.647 38.9%,
+            0.626 41.2%,
+            0.646 43.5%,
+            0.706 45.8%,
+            0.999 52.2%,
+            0.846 56.1%,
+            0.81 57.8%,
+            0.8 59.4%,
+            0.811 61%,
+            0.843 62.6%,
+            0.999 67.4%,
+            0.923 70.3%,
+            0.898 72.9%,
+            0.918 75.5%,
+            0.999 79.8%,
+            0.967 82.1%,
+            0.957 84.2%,
+            1 90.4%,
+            0.991 93.5%,
+            1
+          );
+      }
 
-    @keyframes scale-in-and-rotate {
-      from {
-        scale: 0;
-        rotate: -1080deg;
+      @keyframes slide-down {
+        from {
+          translate: 0 -100vh;
+        }
       }
-    }
-    @keyframes scale-out-and-rotate {
-      to {
-        scale: 0;
-        rotate: 1080deg;
+    } */
+    /* @layer l-scale-rotate {
+      ::view-transition-old(root) {
+        animation-name: scale-out-and-rotate;
+        animation-duration
       }
-    }
+      ::view-transition-new(root) {
+        animation-name: scale-in-and-rotate;
+      }
+
+      @keyframes scale-in-and-rotate {
+        from {
+          scale: 0;
+          rotate: -1080deg;
+        }
+      }
+      @keyframes scale-out-and-rotate {
+        to {
+          scale: 0;
+          rotate: 1080deg;
+        }
+      }
+    } */
   }
 
   /* Step 4 - Exclude header from slide animations */
@@ -64,7 +128,7 @@
   }
 
   /* Step 5 - Add underline to active nav item */
-  @layer current-page-indicator {
+  /* @layer current-page-indicator {
     [aria-current='page'] {
       position: relative;
     }
@@ -79,10 +143,11 @@
       height: 0.25rem;
       view-transition-name: active-nav;
     }
-  }
+  } */
 
   /* Step 6 - Transition card content into place */
-  @layer card {
+  /* Update ::view-transition-group(root) to ::view-transition-group(*) in step 2 */
+  /* @layer card {
     @layer article1 {
       #article1 .image,
       #article-page-1 .image {
@@ -114,7 +179,7 @@
         view-transition-name: desc2;
       }
     }
-  }
+  } */
 
   /* Step 7 - Direction aware transitions. Disable step 3 and 6 for this to work properly */
   /* @layer direction {
@@ -230,10 +295,6 @@
     border-radius: 100vw;
   }
 
-  #article-page h1 {
-    width: fit-content;
-  }
-
   .filters {
     display: flex;
     gap: 1rem;
@@ -242,8 +303,6 @@
 
   .filter-btn {
     cursor: pointer;
-    background: #ddd;
-    border: 1px solid #ddd;
     padding: 0.5em 1em;
   }
 
@@ -294,6 +353,10 @@
   *::before,
   *::after {
     box-sizing: border-box;
+  }
+
+  *:focus-visible {
+    outline-offset: 4px;
   }
 
   html {

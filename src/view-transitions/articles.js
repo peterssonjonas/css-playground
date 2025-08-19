@@ -20,19 +20,39 @@ function addFilterButtonsToDOM() {
 }
 
 function addEventListenerToFilterButton(button) {
-  button.addEventListener('click', (e) => {
+  button.addEventListener('click', async (e) => {
     const filter = e.target.getAttribute('data-filter')
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion)'
+    ).matches
 
-    if (!document.startViewTransition) {
+    if (!document.startViewTransition || prefersReducedMotion) {
       updateActiveButton(e.target)
       filterArticles(filter)
       return
     }
 
-    document.startViewTransition(() => {
+    const transition = document.startViewTransition(() => {
       updateActiveButton(e.target)
       filterArticles(filter)
     })
+    if (!filterWrapper.style.viewTransitionName) {
+      document.querySelector('h1').style.viewTransitionName = 'articles-title'
+      filterWrapper.style.viewTransitionName = 'articles-filter'
+      wrapper.querySelectorAll('.card').forEach((card, i) => {
+        card.style.viewTransitionName = `article${i + 1}`
+      })
+    }
+
+    try {
+      await transition.finished
+    } finally {
+      document.querySelector('h1').style.viewTransitionName = ''
+      filterWrapper.style.viewTransitionName = ''
+      wrapper.querySelectorAll('.card').forEach((card, i) => {
+        card.style.viewTransitionName = ''
+      })
+    }
   })
 }
 
@@ -125,7 +145,6 @@ function addArticlesToDOM() {
     const card = articleElem.querySelector('.card')
     card.id = `article${i + 1}`
     card.dataset.category = article.category
-    card.style.viewTransitionName = `article${i + 1}`
 
     const image = articleElem.querySelector('.image')
     image.style.setProperty('--color', article.color)

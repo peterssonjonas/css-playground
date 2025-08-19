@@ -33,20 +33,17 @@ const ENABLE_JS_VIEW_TRANSITIONS = true
 const ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS = false
 
 if (ENABLE_JS_VIEW_TRANSITIONS) {
-  window.addEventListener('pageswap', onPageSwap, { once: true })
-  window.addEventListener('pagereveal', onPageReveal, { once: true })
+  window.addEventListener('pageswap', onPageSwap)
+  window.addEventListener('pagereveal', onPageReveal)
 }
 
 async function onPageSwap(e) {
   if (!e.viewTransition) return
-
   const currentUrl = e.activation.from?.url
     ? new URL(e.activation.from.url)
     : null
   const targetUrl = new URL(e.activation.entry.url)
-
-  // Going from article page to articles list page
-  if (isArticlePage(currentUrl) && isArticlesListPage(targetUrl)) {
+  if (isGoingFromArticlePageToHomeOrListPage(currentUrl, targetUrl)) {
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#article-page .image`), 'image'],
@@ -57,10 +54,8 @@ async function onPageSwap(e) {
     )
   }
 
-  // Going to article page
-  if (isArticlesListPage(currentUrl) && isArticlePage(targetUrl)) {
+  if (isGoingFromHomeOrListPageToArticlePage(currentUrl, targetUrl)) {
     const articleSlug = extractSlugFromUrl(targetUrl)
-
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#${articleSlug} .image`), 'image'],
@@ -69,6 +64,10 @@ async function onPageSwap(e) {
       ],
       e.viewTransition.finished
     )
+  }
+
+  if (isGoingBetweenHomeAndListPage(currentUrl, targetUrl)) {
+    setTemporaryViewTransitionNamesToFirstTwoArticles(e.viewTransition.finished)
   }
 }
 
@@ -79,8 +78,7 @@ async function onPageReveal(e) {
   const fromUrl = new URL(navigation.activation.from.url)
   const currentUrl = new URL(navigation.activation.entry.url)
 
-  // Went from article page to articles list page
-  if (isArticlePage(fromUrl) && isArticlesListPage(currentUrl)) {
+  if (isGoingFromArticlePageToHomeOrListPage(fromUrl, currentUrl)) {
     const articleSlug = extractSlugFromUrl(fromUrl)
 
     setTemporaryViewTransitionNames(
@@ -93,8 +91,7 @@ async function onPageReveal(e) {
     )
   }
 
-  // Went to article page
-  if (isArticlesListPage(fromUrl) && isArticlePage(currentUrl)) {
+  if (isGoingFromHomeOrListPageToArticlePage(fromUrl, currentUrl)) {
     setTemporaryViewTransitionNames(
       [
         [document.querySelector(`#article-page .image`), 'image'],
@@ -105,8 +102,12 @@ async function onPageReveal(e) {
     )
   }
 
+  if (isGoingBetweenHomeAndListPage(fromUrl, currentUrl)) {
+    setTemporaryViewTransitionNamesToFirstTwoArticles(e.viewTransition.finished)
+  }
+
   if (ENABLE_DIRECTION_AWARE_VIEW_TRANSITIONS) {
-    setTemporaryViewTranitionDirection(
+    setTemporaryViewTransitionDirection(
       fromUrl,
       currentUrl,
       e.viewTransition.finished
@@ -131,6 +132,27 @@ function isArticlePage(url) {
   return url.pathname.split('/').pop().startsWith('article')
 }
 
+function isGoingFromArticlePageToHomeOrListPage(prevUrl, nextUrl) {
+  return (
+    isArticlePage(prevUrl) &&
+    (isHomePage(nextUrl) || isArticlesListPage(nextUrl))
+  )
+}
+
+function isGoingBetweenHomeAndListPage(prevUrl, nextUrl) {
+  return (
+    (isHomePage(prevUrl) && isArticlesListPage(nextUrl)) ||
+    (isArticlesListPage(prevUrl) && isHomePage(nextUrl))
+  )
+}
+
+function isGoingFromHomeOrListPageToArticlePage(prevUrl, nextUrl) {
+  return (
+    (isHomePage(prevUrl) || isArticlesListPage(prevUrl)) &&
+    isArticlePage(nextUrl)
+  )
+}
+
 function extractSlugFromUrl(url) {
   return url.pathname.split('/').pop().split('.').shift()
 }
@@ -147,7 +169,7 @@ async function setTemporaryViewTransitionNames(entries, vtPromise) {
   }
 }
 
-async function setTemporaryViewTranitionDirection(
+async function setTemporaryViewTransitionDirection(
   fromUrl,
   currentUrl,
   vtPromise
@@ -157,6 +179,20 @@ async function setTemporaryViewTranitionDirection(
   await vtPromise
 
   delete document.documentElement.dataset.direction
+}
+
+async function setTemporaryViewTransitionNamesToFirstTwoArticles(vtPromise) {
+  setTemporaryViewTransitionNames(
+    [
+      [document.querySelector(`#article1 .image`), 'image1'],
+      [document.querySelector(`#article1 h2 a`), 'title1'],
+      [document.querySelector(`#article1 p`), 'desc1'],
+      [document.querySelector(`#article2 .image`), 'image2'],
+      [document.querySelector(`#article2 h2 a`), 'title2'],
+      [document.querySelector(`#article2 p`), 'desc2'],
+    ],
+    vtPromise
+  )
 }
 
 const pages = ['', 'index', 'about', 'articles', 'article1', 'article2']
