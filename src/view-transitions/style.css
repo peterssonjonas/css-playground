@@ -1,10 +1,10 @@
 @layer viewtransitions {
   /* Step 1 - Enable view transitions */
-  @media (prefers-reduced-motion: no-preference) {
+  /* @media (prefers-reduced-motion: no-preference) {
     @view-transition {
       navigation: auto;
     }
-  }
+  } */
 
   /* Step 2 - Increase animation duration to see what actually happens during the view transition */
   /* @layer duration {
@@ -155,9 +155,8 @@
       #article-page-1 .image {
         view-transition-name: image1;
       }
-      #article1 a,
+      #article1 h2,
       #article-page-1 h1 {
-        width: fit-content;
         view-transition-name: title1;
       }
       #article1 p,
@@ -173,13 +172,16 @@
       }
       #article2 a,
       #article-page-2 h1 {
-        width: fit-content;
         view-transition-name: title2;
       }
       #article2 p,
       #article-page-2 .preamble {
         view-transition-name: desc2;
       }
+    }
+
+    :is(#article-page-1, #article-page-2) h1 {
+      width: fit-content;
     }
   } */
 
@@ -276,11 +278,6 @@
   }
   .card-content {
     padding: 0 0.5rem;
-
-    h2,
-    p {
-      width: fit-content;
-    }
   }
 
   .category {
