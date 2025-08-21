@@ -101,7 +101,6 @@
     /* @layer l-scale-rotate {
       ::view-transition-old(root) {
         animation-name: scale-out-and-rotate;
-        animation-duration
       }
       ::view-transition-new(root) {
         animation-name: scale-in-and-rotate;
